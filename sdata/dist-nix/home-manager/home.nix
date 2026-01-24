@@ -105,6 +105,7 @@ quickshell, home_attrs, ... }:
       #ttf-readex-pro (TODO: seems not available as nixpkg)
       rubik #ttf-rubik-vf
       twemoji-color-font #ttf-twemoji
+      zoxide #zoxide
 
 
       ### illogical-impulse-hyprland

@@ -13,7 +13,13 @@ RowLayout {
     spacing: 6
     property bool animateWidth: false
     property alias searchInput: searchInput
-    property string searchingText
+    property string searchingText: searchInput.text
+
+    Timer {
+        id: queryDebouncer
+        interval: 150
+        onTriggered: LauncherSearch.query = searchInput.text
+    }
 
     function forceFocus() {
         searchInput.forceActiveFocus();
@@ -58,15 +64,29 @@ RowLayout {
             default: return "search";
         }
     }
-    ToolbarTextField { // Search box
+    ToolbarTextField {
         id: searchInput
         Layout.topMargin: 4
         Layout.bottomMargin: 4
         implicitHeight: 40
-        focus: GlobalStates.overviewOpen
         font.pixelSize: Appearance.font.pixelSize.small
         placeholderText: Translation.tr("Search, calculate or run")
         implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
+
+        Connections {
+            target: GlobalStates
+            function onOverviewOpenChanged() {
+                if (GlobalStates.overviewOpen) {
+                    searchInput.forceActiveFocus();
+                }
+            }
+        }
+
+        Component.onCompleted: {
+            if (GlobalStates.overviewOpen) {
+                searchInput.forceActiveFocus();
+            }
+        }
 
         Behavior on implicitWidth {
             id: searchWidthBehavior
@@ -78,7 +98,7 @@ RowLayout {
             }
         }
 
-        onTextChanged: LauncherSearch.query = text
+        onTextChanged: queryDebouncer.restart()
 
         onAccepted: {
             if (appResults.count > 0) {

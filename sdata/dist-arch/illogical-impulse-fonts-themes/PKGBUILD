@@ -1,6 +1,6 @@
 pkgname=illogical-impulse-fonts-themes
 pkgver=1.0
-pkgrel=4
+pkgrel=5
 pkgdesc='Illogical Impulse Fonts and Theming Dependencies'
 arch=(any)
 license=(None)
@@ -21,4 +21,5 @@ depends=(
   ttf-readex-pro
   ttf-rubik-vf
   ttf-twemoji
+  zoxide
 )

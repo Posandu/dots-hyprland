@@ -28,6 +28,7 @@ RDEPEND="
 	media-fonts/readex-pro
 	media-fonts/rubik-vf
 	media-fonts/twemoji
+	app-shells/zoxide
 "
 ##### CUSTOM EBUILDS
 # x11-themes/adw-gtk3

@@ -24,6 +24,33 @@ function setup_user_group(){
 showfun install-python-packages
 v install-python-packages
 
+function install-oh-my-zsh() {
+  if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+    printf "${STY_CYAN}Installing oh-my-zsh...${STY_RST}\n"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    
+    if [[ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]]; then
+      git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    fi
+    
+    if [[ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]]; then
+      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    fi
+    
+    printf "${STY_GREEN}oh-my-zsh installed successfully!${STY_RST}\n"
+  else
+    printf "${STY_YELLOW}oh-my-zsh is already installed, skipping...${STY_RST}\n"
+  fi
+}
+
+if [[ -f "sdata/subcmd-install/3.files-exp.yaml" ]]; then
+  selected_shell=$(yq '.user_preferences.shell // "fish"' sdata/subcmd-install/3.files-exp.yaml)
+  if [[ "$selected_shell" == "zsh" ]]; then
+    showfun install-oh-my-zsh
+    v install-oh-my-zsh
+  fi
+fi
+
 showfun setup_user_group
 v setup_user_group
 
