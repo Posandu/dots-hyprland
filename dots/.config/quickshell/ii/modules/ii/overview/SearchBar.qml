@@ -68,7 +68,9 @@ RowLayout {
         id: searchInput
         Layout.topMargin: 4
         Layout.bottomMargin: 4
+        Layout.rightMargin: 4
         implicitHeight: 40
+        focus: true
         font.pixelSize: Appearance.font.pixelSize.small
         placeholderText: Translation.tr("Search, calculate or run")
         implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
@@ -77,14 +79,8 @@ RowLayout {
             target: GlobalStates
             function onOverviewOpenChanged() {
                 if (GlobalStates.overviewOpen) {
-                    searchInput.forceActiveFocus();
+                    Qt.callLater(() => searchInput.forceActiveFocus());
                 }
-            }
-        }
-
-        Component.onCompleted: {
-            if (GlobalStates.overviewOpen) {
-                searchInput.forceActiveFocus();
             }
         }
 
@@ -102,7 +98,6 @@ RowLayout {
 
         onAccepted: {
             if (appResults.count > 0) {
-                // Get the first visible delegate and trigger its click
                 let firstItem = appResults.itemAtIndex(0);
                 if (firstItem && firstItem.clicked) {
                     firstItem.clicked();
@@ -117,62 +112,6 @@ RowLayout {
                 LauncherSearch.query = tabbedText;
                 searchInput.text = tabbedText;
                 event.accepted = true;
-            }
-        }
-    }
-
-    IconToolbarButton {
-        Layout.topMargin: 4
-        Layout.bottomMargin: 4
-        onClicked: {
-            GlobalStates.overviewOpen = false;
-            Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "region", "search"]);
-        }
-        text: "image_search"
-        StyledToolTip {
-            text: Translation.tr("Google Lens")
-        }
-    }
-
-    IconToolbarButton {
-        id: songRecButton
-        Layout.topMargin: 4
-        Layout.bottomMargin: 4
-        Layout.rightMargin: 4
-        toggled: SongRec.running
-        onClicked: SongRec.toggleRunning()
-        text: "music_cast"
-
-        StyledToolTip {
-            text: Translation.tr("Recognize music")
-        }
-
-        colText: toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSurfaceVariant
-        background: MaterialShape {
-            RotationAnimation on rotation {
-                running: songRecButton.toggled
-                duration: 12000
-                easing.type: Easing.Linear
-                loops: Animation.Infinite
-                from: 0
-                to: 360
-            }
-            shape: {
-                if (songRecButton.down) {
-                    return songRecButton.toggled ? MaterialShape.Shape.Circle : MaterialShape.Shape.Square
-                } else {
-                    return songRecButton.toggled ? MaterialShape.Shape.SoftBurst : MaterialShape.Shape.Circle
-                }
-            }
-            color: {
-                if (songRecButton.toggled) {
-                    return songRecButton.hovered ? Appearance.colors.colPrimaryHover : Appearance.colors.colPrimary
-                } else {
-                    return songRecButton.hovered ? Appearance.colors.colSurfaceContainerHigh : ColorUtils.transparentize(Appearance.colors.colSurfaceContainerHigh)
-                }
-            }
-            Behavior on color {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
             }
         }
     }
