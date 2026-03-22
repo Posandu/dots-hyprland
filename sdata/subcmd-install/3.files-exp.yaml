@@ -30,12 +30,6 @@ patterns:
     condition:
       type: "shell"
       value: "zsh"
-  - from: "dots/.zshrc"
-    to: "$HOME/.zshrc"
-    mode: "soft-backup"
-    condition:
-      type: "shell"
-      value: "zsh"
   - from: "dots/.config/foot"
     to: "$XDG_CONFIG_HOME/foot"
     mode: "sync"

@@ -77,8 +77,7 @@ packages = [
   "readex-pro-fonts-all",
   "google-rubik-vf-fonts",
   "twitter-twemoji-fonts",
-  "google-sans-flex-vf-fonts",
-  "zoxide"
+  "google-sans-flex-vf-fonts"
 ]
 
 # Hyprland
